@@ -1,2 +1,2 @@
 # Dasher
-A small side-scrolling hack and slash game
+A small side-scrolling hack and slash game -- WIP
