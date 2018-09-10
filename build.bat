@@ -8,3 +8,4 @@ set libs= -static-libgcc -static-libstdc++ -lmingw32 -lSDL2main -lSDL2 -lSDL2_ne
 set name=Cookie.exe
 
 g++ %idir% %flag% %warn% -o %name% source/main.cpp %ldir% %libs%
+PAUSE
