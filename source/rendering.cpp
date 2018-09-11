@@ -7,7 +7,7 @@ namespace Window
 
 void CreateWindow()
 {
-	window = SDL_CreateWindow("Dungeon",
+	window = SDL_CreateWindow("Dasher",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
 		window_pos.w,
@@ -65,7 +65,6 @@ void ClearRenderer()
 	Camrea::offset_x = (Window::window_pos.w / 2) - ((renderering_pos.w * render_scale) / 2);
 	Camrea::offset_y = (Window::window_pos.h / 2) - ((renderering_pos.h * render_scale) / 2);
 
-	SDL_SetRenderDrawColor(renderer, 71, 187, 255, 255);
 	SDL_RenderClear(renderer);
 }
 

@@ -35,13 +35,4 @@ bool BoxCollision(int _x1, int _y1, int _w1, int _h1, int _x2, int _y2, int _w2,
 	return false;
 }
 
-bool LineCollision(int _x1, int _y1, int _x2, int _y2, int _x3, int _y3, int _x4, int _y4)
-{
-	float ua = ((_x4 - _x3) * (_y1 - _y3) - (_y4 - _y3) * (_x1 - _x3)) / ((_y4 - _y3) * (_x2 - _x1) - (_x4 - _x3) * (_y2 - _y1));
-
-	printf("%f\n", ua);
-
-	return false;
-}
-
 }

@@ -4,6 +4,7 @@
 #include "headers\\texture.h"
 #include "headers\\font.h"
 #include "headers\\tools.h"
+#include "headers\\game.h"
 
 #include "error.cpp"
 #include "timer.cpp"
@@ -11,37 +12,29 @@
 #include "texture.cpp"
 #include "font.cpp"
 #include "tools.cpp"
+#include "game.cpp"
 
 bool running = true;
+SDL_Event event;
 
 int main (int _argc, char* _argv[])
 {
-	Init::Init();
-
-	Window::CreateWindow();
-	Renderer::CreateRenderer();
+	Game::Init();
 
 	while(running){
+
+		running = Game::Event(&event);
+
 		int x,y;
 		SDL_GetMouseState(&x,&y);
 
-		int line_x = 100;
-		int line_y = 100;
-		int line_x_2 = 300;
-		int line_y_2 = 300;
-
-		SDL_SetRenderDrawColor(Renderer::renderer, 0, 0, 0, 255);
-		Renderer::ClearRenderer();
-
-		SDL_SetRenderDrawColor(Renderer::renderer, 0, 255, 0, 255);
-
-		Renderer::PresentRenderer();
+		
+		Game::Render();
 
 
 	}
 
-	Renderer::DestroyRenderer();
-	Window::DestroyWindow();
+	Game::Destroy();
 
 	return 0;
 }
