@@ -4,8 +4,8 @@
 class Vector2D
 {
 public:
-	double x;
-	double y;
+	double x = 0.00;
+	double y = 0.00;
 
 	void Create(double _x, double _y);
 	void Normalise(double* _x, double* _y);

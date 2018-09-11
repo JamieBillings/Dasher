@@ -9,7 +9,7 @@ class Animation
 public:
 	SDL_Rect base_pos;
 	int key_frames;
-	int current_frame; //this should be the only changing value in Animation
+	int current_frame; //this should be the only constantly changing value in Animation
 	float* speed_per_frame;
 
 	float counter;
