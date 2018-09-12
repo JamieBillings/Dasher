@@ -85,7 +85,7 @@ void Texture::Render(Animation* _animation)
 	SDL_RenderCopy(Renderer::renderer, texture, &true_src, &true_dst);
 }
 
-void Texture::RenderFlip(Animation* _animation)
+void Texture::Render(Animation* _animation, SDL_RendererFlip _flip)
 {
 	SDL_Rect true_dst = dst_pos;
 	true_dst.x = Camrea::offset_x + (true_dst.x * Renderer::render_scale);
@@ -95,7 +95,7 @@ void Texture::RenderFlip(Animation* _animation)
 
 	SDL_Rect true_src = _animation->base_pos;
 	true_src.x = _animation->base_pos.x + _animation->base_pos.w * _animation->current_frame;
-	SDL_RenderCopyEx(Renderer::renderer, texture, &true_src, &true_dst, 0.00, nullptr, SDL_FLIP_HORIZONTAL);
+	SDL_RenderCopyEx(Renderer::renderer, texture, &true_src, &true_dst, 0.00, nullptr, _flip);
 }
 
 void Texture::Unload()

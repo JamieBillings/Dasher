@@ -33,6 +33,7 @@ public:
 
 	void Render();
 	void Render(Animation* _animation);
+	void Render(Animation* _animation, SDL_RendererFlip _flip);
 	void RenderRotate(double _dir);
 	void RenderFlip();
 	void RenderFlip(Animation* _animation);

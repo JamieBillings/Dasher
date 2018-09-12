@@ -4,7 +4,7 @@
 class BaseEntity
 {
 public:
-	static SDL_Texture sprite;
+	static Texture sprite;
 	static void Init();
 	static void Deinit();
 
@@ -12,6 +12,8 @@ public:
 	int pos_y;
 	int width;
 	int height;
+
+	bool flipped;
 
 	Vector2D velocity;
 	Animation base_animation;
@@ -29,6 +31,8 @@ public:
 	Animation walking_animation;
 
 	virtual void Create(SDL_Rect _src_pos);
+	virtual void Render();
+	virtual void Destroy();
 };
 
 
