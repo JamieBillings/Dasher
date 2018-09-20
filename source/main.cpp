@@ -24,6 +24,7 @@ int main (int _argc, char* _argv[])
 	Game::Init();
 
 	while(running){
+		Timer::frequency = static_cast<float>(SDL_GetPerformanceFrequency());
 		running = Game::Event(&event);
 		Game::GameLoop();
 
@@ -31,6 +32,8 @@ int main (int _argc, char* _argv[])
 		Renderer::ClearRenderer();
 		Game::Render();
 		Renderer::PresentRenderer();
+
+		Timer::CapFramerate();
 	}
 
 	Game::Destroy();

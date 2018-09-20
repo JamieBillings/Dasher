@@ -2,6 +2,7 @@ namespace Game
 {
 	Player player;
 	Texture background;
+	SDL_Point ground = {0, 322}; 
 
 	bool Event(SDL_Event* event)
 	{
@@ -11,8 +12,7 @@ namespace Game
 			if(event->type == SDL_QUIT){return false;}
 
 			
-			if(state[SDL_SCANCODE_LEFT]){player.flipped = true;}
-			if(state[SDL_SCANCODE_RIGHT]){player.flipped = false;}
+			player.HandleEvents(event);
 
 		}
 
@@ -39,7 +39,17 @@ namespace Game
 
 	void GameLoop()
 	{
-		
+		for(int i = 0; i < 100; i++){
+			if(entity_render_queue[i] != nullptr){
+				entity_render_queue[i]->Update();
+				if(!entity_render_queue[i]->grounded){
+					if(entity_render_queue[i]->pos_y + entity_render_queue[i]->height > ground.y){
+						entity_render_queue[i]->pos_y = ground.y - entity_render_queue[i]->height;
+						entity_render_queue[i]->grounded = true;
+					}
+				}
+			}
+		}
 	}
 
 	void Render()
