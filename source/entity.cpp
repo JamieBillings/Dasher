@@ -32,7 +32,7 @@ void BaseEntity::Update()
 
 void BaseEntity::Render()
 {
-
+	
 }
 
 void BaseEntity::Destroy()
@@ -127,8 +127,12 @@ void Player::Update()
 	}
 	if(w_down){
 		if(!grounded){
-			pos_y += (50 * Timer::delta_time);
+			pos_y +=(50 * Timer::delta_time);
 		}
+	}
+
+	if(!grounded){
+		pos_y += (50 * Timer::delta_time);
 	}
 }
 

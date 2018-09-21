@@ -13,6 +13,8 @@ public:
 	int width;
 	int height;
 
+	static float map_offset;
+
 	int jump_height;
 
 	bool flipped = false;

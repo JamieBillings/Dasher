@@ -4,6 +4,8 @@ namespace Game
 	Texture background;
 	SDL_Point ground = {0, 322}; 
 
+	int map_offset;
+
 	bool Event(SDL_Event* event)
 	{
 		const uint8_t* state = SDL_GetKeyboardState(NULL);
