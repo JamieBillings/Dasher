@@ -13,6 +13,8 @@ public:
 	int width;
 	int height;
 
+	Vector2D vector;
+
 	static float map_offset;
 
 	int jump_height;
@@ -21,6 +23,8 @@ public:
 	bool grounded = false;
 
 	Vector2D velocity;
+	Vector2D max_velocity;
+
 	Animation base_animation;
 
 	virtual void Create(SDL_Rect _src_pos);
@@ -47,6 +51,7 @@ public:
 	virtual void Render();
 	virtual void Destroy();
 	void HandleEvents(SDL_Event* _event);
+	void CheckMapBound();
 };
 
 

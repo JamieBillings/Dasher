@@ -4,7 +4,8 @@ Texture BaseEntity::sprite;
 
 void BaseEntity::Init()
 {
-	sprite.Load("Dev\\Images\\spritesheet.png");
+	sprite.Load("Dev\\Images\\SimonSpriteSheet.png");
+	//32x47
 }
 
 void BaseEntity::Deinit()
@@ -14,8 +15,8 @@ void BaseEntity::Deinit()
 
 void BaseEntity::Create(SDL_Rect _src_pos)
 {
-	float temp[1] = {0.00};
-	base_animation.Set(_src_pos,1,temp);
+	float temp[5] = {1.00,1.00,1.00,1.00};
+	base_animation.Set(_src_pos,5,temp);
 
 	pos_x = 320;
 	pos_y = 240;
@@ -54,6 +55,8 @@ void Player::Create(SDL_Rect _src_pos)
 	pos_y = 322 - 64;
 	width = _src_pos.w;
 	height = _src_pos.h;
+
+	max_velocity.Create(3.4,5);
 }
 
 void Player::Render()
@@ -61,7 +64,6 @@ void Player::Render()
 	int temp_x = static_cast<int>(pos_x);
 	int temp_y = static_cast<int>(pos_y);
 	sprite.dst_pos = {temp_x, temp_y, width, height};
-	sprite.Render(&base_animation);
 
 	if(flipped){sprite.Render(&base_animation, SDL_FLIP_HORIZONTAL);}
 	else{sprite.Render(&base_animation);}
@@ -111,14 +113,27 @@ void Player::Update()
 {
 	if(w_left){
 		flipped = true;
-		if(pos_x < 0){pos_x = 0;}	
-		else{pos_x -= (100 * Timer::delta_time);}
+		velocity.x -= 0.08;
+		if(velocity.x < -(max_velocity.x)){velocity.x = -(max_velocity.x);}
+	}
+	else{
+		if(velocity.x < 0){
+			if(velocity.x > -1 && velocity.x < 0){velocity.x = 0;}
+			else{velocity.x += 0.8;}
+		}
 	}
 	if(w_right){
 		flipped = false;
-		if(pos_x + width > 380){pos_x = 380 - width;}
-		else{pos_x += (100 * Timer::delta_time);}
+		velocity.x += 0.08;
+		if(velocity.x > max_velocity.x){velocity.x = max_velocity.x;}
 	}
+	else{
+		if(velocity.x > 0){
+			if(velocity.x < 1 && velocity.x > 0){velocity.x = 0;}
+			else{velocity.x -= 0.8;}
+		}
+	}
+
 	if(w_up){
 		if(grounded){
 			pos_y -= 50;
@@ -134,6 +149,17 @@ void Player::Update()
 	if(!grounded){
 		pos_y += (50 * Timer::delta_time);
 	}
+
+	pos_x += velocity.x * (100 * Timer::delta_time);
+
+	if(pos_x < 0){
+		pos_x = 0;
+		velocity.x = 0;
+	}
+
+	if(pos_x + width > 380){pos_x = 380 - width;}
+
+	printf("vel: %f \n", static_cast<float>(velocity.x));
 }
 
 void Player::Destroy()

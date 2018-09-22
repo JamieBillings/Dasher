@@ -30,7 +30,7 @@ namespace Game
 		BaseEntity::Init();
 		background.Load("Dev\\Images\\ground--temp.png");
 
-		SDL_Rect temp = {0,0,32,64};
+		SDL_Rect temp = {0,47,32,47};
 		player.Create(temp);
 
 		for(int i = 0; i < 100; i++){
