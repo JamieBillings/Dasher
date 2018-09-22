@@ -18,6 +18,7 @@ public:
 
 	void Set(SDL_Rect _base_pos, int _key_frames, float* _speed_per_frame);
 	void Progress();
+	void Stop();
 	void Delete();
 };
 

@@ -48,8 +48,9 @@ void BaseEntity::Jump()
 
 void Player::Create(SDL_Rect _src_pos)
 {
-	float temp[1] = {0.00};
-	base_animation.Set(_src_pos,1,temp);
+	float temp[5] = {0.08,0.08,0.08,0.08};
+	base_animation.Set(_src_pos,4,temp);
+	base_animation.loop = true;
 
 	pos_x = 320;
 	pos_y = 322 - 64;
@@ -119,7 +120,7 @@ void Player::Update()
 	else{
 		if(velocity.x < 0){
 			if(velocity.x > -1 && velocity.x < 0){velocity.x = 0;}
-			else{velocity.x += 0.8;}
+			else{velocity.x += 0.72;}
 		}
 	}
 	if(w_right){
@@ -130,7 +131,7 @@ void Player::Update()
 	else{
 		if(velocity.x > 0){
 			if(velocity.x < 1 && velocity.x > 0){velocity.x = 0;}
-			else{velocity.x -= 0.8;}
+			else{velocity.x -= 0.72;}
 		}
 	}
 
@@ -158,6 +159,10 @@ void Player::Update()
 	}
 
 	if(pos_x + width > 380){pos_x = 380 - width;}
+
+	if(w_left || w_right){base_animation.Progress();}
+	else{base_animation.Stop();}
+	
 
 	printf("vel: %f \n", static_cast<float>(velocity.x));
 }

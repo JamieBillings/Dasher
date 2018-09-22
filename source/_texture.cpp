@@ -131,3 +131,9 @@ void Animation::Progress()
 		}
 	}
 }
+
+void Animation::Stop()
+{
+	current_frame = 0;
+	counter = 0.0;
+}
