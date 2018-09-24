@@ -7,6 +7,8 @@
 #include "headers\\entity.h"
 #include "headers\\game.h"
 
+#define GRAVITY 0.20
+
 #include "_error.cpp"
 #include "_timer.cpp"
 #include "_rendering.cpp"

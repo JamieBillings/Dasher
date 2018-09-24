@@ -27,8 +27,8 @@ void BaseEntity::Create(SDL_Rect _src_pos)
 
 void BaseEntity::Update()
 {
-	printf("delta_time: %f\n", Timer::delta_time);
-	if(!grounded){pos_y = pos_y + (10 * Timer::delta_time);}
+	//printf("delta_time: %f\n", Timer::delta_time);
+	//if(!grounded){pos_y = pos_y + (10 * Timer::delta_time);}
 }
 
 void BaseEntity::Render()
@@ -75,16 +75,16 @@ void Player::HandleEvents(SDL_Event* _event)
 	if(_event->type == SDL_KEYDOWN){
 		switch(_event->key.keysym.sym){
 			case SDLK_UP:
-				w_up = true;
+				walk_up = true;
 				break;
 			case SDLK_RIGHT:
-				w_right = true;
+				walk_right = true;
 				break;
 			case SDLK_DOWN:
-				w_down = true;
+				walk_down = true;
 				break;
 			case SDLK_LEFT:
-				w_left = true;
+				walk_left = true;
 				break;
 			default:
 				break;
@@ -93,16 +93,16 @@ void Player::HandleEvents(SDL_Event* _event)
 	if(_event->type == SDL_KEYUP){
 		switch(_event->key.keysym.sym){
 			case SDLK_UP:
-				w_up = false;
+				walk_up = false;
 				break;
 			case SDLK_RIGHT:
-				w_right = false;
+				walk_right = false;
 				break;
 			case SDLK_DOWN:
-				w_down = false;
+				walk_down = false;
 				break;
 			case SDLK_LEFT:
-				w_left = false;
+				walk_left = false;
 				break;
 			default:
 				break;
@@ -112,18 +112,19 @@ void Player::HandleEvents(SDL_Event* _event)
 
 void Player::Update()
 {
-	if(w_left){
+	//
+	if(walk_left){
 		flipped = true;
 		velocity.x -= 0.08;
 		if(velocity.x < -(max_velocity.x)){velocity.x = -(max_velocity.x);}
 	}
 	else{
 		if(velocity.x < 0){
-			if(velocity.x > -1 && velocity.x < 0){velocity.x = 0;}
-			else{velocity.x += 0.72;}
+			(velocity.x > -1 && velocity.x < 0) ? velocity.x = 0 : velocity.x += 0.72;
 		}
 	}
-	if(w_right){
+	//
+	if(walk_right){
 		flipped = false;
 		velocity.x += 0.08;
 		if(velocity.x > max_velocity.x){velocity.x = max_velocity.x;}
@@ -134,21 +135,28 @@ void Player::Update()
 			else{velocity.x -= 0.72;}
 		}
 	}
-
-	if(w_up){
+	//
+	if(walk_up){
 		if(grounded){
-			pos_y -= 50;
 			grounded = false;
+			velocity.y = -5;
 		}
 	}
-	if(w_down){
+	//
+	if(walk_down){
 		if(!grounded){
-			pos_y +=(50 * Timer::delta_time);
+			velocity.y += 0.8;
 		}
 	}
 
 	if(!grounded){
-		pos_y += (50 * Timer::delta_time);
+		pos_y += (velocity.y * (100 * Timer::delta_time));
+		velocity.y += GRAVITY;
+		if(pos_y > 340){
+			pos_y = 340;
+			velocity.y = 0;
+			grounded = true;
+		}
 	}
 
 	pos_x += velocity.x * (100 * Timer::delta_time);
@@ -160,7 +168,7 @@ void Player::Update()
 
 	if(pos_x + width > 380){pos_x = 380 - width;}
 
-	if(w_left || w_right){base_animation.Progress();}
+	if((walk_left || walk_right) && grounded){walk_animation.Progress();}
 	else{base_animation.Stop();}
 	
 

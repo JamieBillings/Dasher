@@ -41,10 +41,10 @@ class Player: public BaseEntity
 public:
 	Animation walking_animation;
 
-	bool w_up;
-	bool w_right;
-	bool w_down;
-	bool w_left;
+	bool walk_up;
+	bool walk_right;
+	bool walk_down;
+	bool walk_left;
 
 	virtual void Create(SDL_Rect _src_pos);
 	virtual void Update();
