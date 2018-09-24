@@ -14,6 +14,12 @@ enum EntityState
 
 enum Identifer
 {
+	is_player,
+ 	is_unknown_enemy_type
+}
+
+enum KeyHeld
+{
 	
 }
 
@@ -29,24 +35,29 @@ struct BaseEntity
 	Vector2D velocity;
 	Vector2D max_velocity;
 
+	Animation base_animation;
+	Animation walking_animation;
+	Animation jumping_animation;
+	Animation attacking_animation;
+	Animation hurt_animation;
+
 	float jump_height;
 
 	EntityState state;
 };
 
-struct Player
-{
-	
-};
-
 namespace Entity
 {
+	namespace Player
+	{
+
+	}
 	//Static Functions
 	void Init();
 	void Deinit();
 
+	//base entity functions
 	void Create(BaseEntity _self, SDL_Rect _base_pos);
-	void Create(Player _self, SDL_Rect _base_pos);
 	void Update();
 	void Render();
 	void Destroy();
@@ -68,23 +79,9 @@ public:
 
 	static float map_offset;
 
-	int jump_height;
-
-	//Change the ENUM Later
-	bool flipped = false;
-	bool grounded = false;
-
-	Vector2D velocity;
-	Vector2D max_velocity;
-
 	Animation base_animation;
 	Animation walking_animation;
 	Animation jumping_animation;
-
-	//Change to ENUM Later
-	bool is_base = false;
-	bool is_walking = false;
-	bool is_jumping = false;
 
 	virtual void Create(SDL_Rect _src_pos);
 	virtual void Update();
