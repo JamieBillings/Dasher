@@ -1,6 +1,7 @@
 #ifndef ENTITY_H_INCLUDED
 #define ENTITY_H_INCLUDED
 
+//Change to Struct System with void* entity List
 class BaseEntity
 {
 public:
@@ -19,6 +20,7 @@ public:
 
 	int jump_height;
 
+	//Change the ENUM Later
 	bool flipped = false;
 	bool grounded = false;
 
@@ -26,6 +28,13 @@ public:
 	Vector2D max_velocity;
 
 	Animation base_animation;
+	Animation walking_animation;
+	Animation jumping_animation;
+
+	//Change to ENUM Later
+	bool is_base = false;
+	bool is_walking = false;
+	bool is_jumping = false;
 
 	virtual void Create(SDL_Rect _src_pos);
 	virtual void Update();
@@ -39,8 +48,6 @@ public:
 class Player: public BaseEntity
 {
 public:
-	Animation walking_animation;
-
 	bool walk_up;
 	bool walk_right;
 	bool walk_down;

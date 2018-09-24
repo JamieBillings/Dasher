@@ -48,9 +48,13 @@ void BaseEntity::Jump()
 
 void Player::Create(SDL_Rect _src_pos)
 {
-	float temp[5] = {0.08,0.08,0.08,0.08};
-	base_animation.Set(_src_pos,4,temp);
-	base_animation.loop = true;
+	//Setting Up Animations for Player
+	float temp_walking[5]{0.08,0.08,0.08,0.08};
+	SDL_Rect walking_pos = {0,47,32,47};
+	walking_animation.Set(walking_pos,4,temp_walking);
+	SDL_Rect base_pos = {0,0,32,47};
+	float temp_base[11]{2.0,0.08,0.08,0.08,0.08,1.00,0.08,0.08,0.08,0.08};
+	base_animation.Set(base_pos,10,temp_base);
 
 	pos_x = 320;
 	pos_y = 322 - 64;
@@ -66,8 +70,13 @@ void Player::Render()
 	int temp_y = static_cast<int>(pos_y);
 	sprite.dst_pos = {temp_x, temp_y, width, height};
 
-	if(flipped){sprite.Render(&base_animation, SDL_FLIP_HORIZONTAL);}
-	else{sprite.Render(&base_animation);}
+	Animation* current_animation = &base_animation;; 
+	if(is_base){current_animation = &base_animation;}
+	else if(is_walking){current_animation = &walking_animation;}
+	else if(is_jumping){current_animation = &jumping_animation;}
+
+	if(flipped){sprite.Render(current_animation, SDL_FLIP_HORIZONTAL);}
+	else{sprite.Render(current_animation);}
 }
 
 void Player::HandleEvents(SDL_Event* _event)
@@ -168,9 +177,23 @@ void Player::Update()
 
 	if(pos_x + width > 380){pos_x = 380 - width;}
 
-	if((walk_left || walk_right) && grounded){walk_animation.Progress();}
-	else{base_animation.Stop();}
-	
+	if((walk_left || walk_right) && grounded){
+		walking_animation.Progress();
+		is_walking = true;
+	}
+	else{
+		walking_animation.Stop();
+		is_walking = false;
+	}
+		
+	if(!is_walking && !is_jumping){
+		base_animation.Progress();
+		is_base = true;
+	}
+	else{
+		base_animation.Stop();
+		is_base = false;
+	}
 
 	printf("vel: %f \n", static_cast<float>(velocity.x));
 }

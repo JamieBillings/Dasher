@@ -116,6 +116,7 @@ void Animation::Set(SDL_Rect _base_pos, int _key_frames, float* _speed_per_frame
 	memcpy(speed_per_frame, _speed_per_frame, key_frames*sizeof(float));
 	current_frame = 0;
 	counter = 0.0;
+	loop = true;
 }
 
 void Animation::Progress()
