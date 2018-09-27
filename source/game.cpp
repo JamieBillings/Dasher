@@ -4,7 +4,7 @@ namespace Game
 	Texture background;
 	SDL_Point ground = {0, 322}; 
 
-	int map_offset;
+	float map_offset = 0;
 
 	bool Event(SDL_Event* event)
 	{
@@ -52,6 +52,11 @@ namespace Game
 				}
 			}
 		}
+
+		if(entity_render_queue[0]->velocity.x > 0 && entity_render_queue[0]->pos_x + entity_render_queue[0]->width == 380){
+			map_offset += entity_render_queue[0]->velocity.x;
+		}
+		printf("Map Offset = %f\n", static_cast<float>(map_offset));
 	}
 
 	void Render()

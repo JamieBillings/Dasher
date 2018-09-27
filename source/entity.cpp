@@ -2,15 +2,45 @@
 
 Texture BaseEntity::sprite;
 
-void BaseEntity::Init()
+namespace Entity
 {
-	sprite.Load("Dev\\Images\\SimonSpriteSheet.png");
-	//32x47
-}
+	BaseEntity player;
+	BaseEntity enemy1;
 
-void BaseEntity::Deinit()
-{
-	sprite.Unload();
+	namespace Private
+	{
+		
+	}
+
+	void Init()
+	{
+		BaseEntity::sprite.Load("Dev\\Images\\SimonSpriteSheet.png");
+	}
+
+	void Deinit()
+	{
+		BaseEntity::sprite.Unload();
+	}
+
+	void Create(BaseEntity* _self, SDL_Rect _base_pos)
+	{
+		float temp_still_animation_frame_durations[5] 		= {1.00, 1.00, 1.00, 1.00};
+		float temp_running_animation_frame_durations[5] 	= {1.00, 1.00, 1.00, 1.00};
+		float temp_jumping_animation_frame_durations[4] 	= {1.00, 1.00, 1.00};
+		//float temp_attacking_animation_frame_durations[5] 	= {1.00, 1.00, 1.00, 1.00};
+
+		_self->base_animation.set(_base_pos, 5, temp_still_animation_frame_durations);
+		_base_pos.y += _base_pos.h; 
+		_self->walking_animation.set(_base_pos, 5, temp_running_animation_frame_durations);
+		_base_pos.y += _base_pos.h;
+		_self->jumping_animation.set(_base_pos, 4, temp_jumping_animation_frame_durations);
+
+		if(_self->identifer && EntityIdentifer::is_player == EntityIdentifer::is_player){
+			
+		}
+	}
+
+
 }
 
 void BaseEntity::Create(SDL_Rect _src_pos)

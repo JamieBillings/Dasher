@@ -12,18 +12,26 @@ enum EntityState
 	is_jumping 	= 16
 }
 
-enum Identifer
+enum EntityIdentifer
 {
-	is_player,
- 	is_unknown_enemy_type
+	is_player 				= 1,
+ 	is_unknown_enemy_type 	= 128
 }
 
 enum KeyHeld
 {
-	
+	jump_up			=   1,
+	walk_right		=   2,
+	dive_down		=   4,
+	walk_left		=   8,
+
+	attack_up		=  16,
+	attack_right	=  32,
+	attack_down		=  64,
+	attack_left		= 128
 }
 
-struct BaseEntity
+struct EntityStruct
 {
 	static Texture sprite;
 
@@ -44,23 +52,31 @@ struct BaseEntity
 	float jump_height;
 
 	EntityState state;
+	EntityIdentifer identifer;
 };
 
 namespace Entity
 {
-	namespace Player
-	{
+	BaseEntity player;
+	BaseEntity enemy1;
 
+	namespace Private
+	{
+		
 	}
 	//Static Functions
 	void Init();
 	void Deinit();
 
 	//base entity functions
-	void Create(BaseEntity _self, SDL_Rect _base_pos);
-	void Update();
-	void Render();
-	void Destroy();
+	void Create(BaseEntity* _self, SDL_Rect _base_pos);
+	void Update(BaseEntity* _self);
+	void Render(BaseEntity* _self);
+	void Destroy(BaseEntity* _self);
+
+	//player only entity functions
+	void HandleKeyEvents(SDL_Event _event);
+	void Movement();
 }
 
 class BaseEntity
