@@ -98,13 +98,102 @@ namespace Entity
 		}
 
 		if(_event-> type == SDL_KEYUP){
-
+			switch(_event->key.keysym.sym){
+			case SDLK_UP:
+				key_held ^= KeyHeld::jump_up;
+				break;
+			case SDLK_RIGHT:
+				key_held ^= KeyHeld::walk_right;
+				break;
+			case SDLK_DOWN:
+				key_held ^= KeyHeld::dive_down;
+				break;
+			case SDLK_LEFT:
+				key_held ^= KeyHeld::walk_left;
+				break;
+			default:
+				break;
+			}
 		}
 	}
 
-	void MovePlayer()
+	void MovePlayer(EntityStruct* _player)
 	{
+		if(KeyHeld::walk_left && key_held == KeyHeld::walk_left){
+			_player->state |= EntityState::is_flipped;
+			_player->velocity.x -= 0.08;
+			if(_player->velocity.x < -(_player->max_velocity.x)){_player->velocity.x = -(_player->max_velocity.x);}
+		}
+		else{
+			if(_player->velocity.x < 0){
+				(_player->velocity.x > -1 && _player->velocity.x < 0) ? _player->velocity.x = 0 : _player->velocity.x += 0.72;
+			}
+		}
 		
+		if(KeyHeld::walk_right && key_held == KeyHeld::walk_right){
+			_player->state ^= EntityState::is_flipped;
+			_player->velocity.x += 0.08;
+			if(_player->velocity.x > _player->max_velocity.x){_player->velocity.x = _player->max_velocity.x;}
+		}
+		else{
+			if(_player->velocity.x > 0){
+				(_player->velocity.x < 1 && _player->velocity.x > 0) ? _player->velocity.x = 0 : _player->velocity.x -= 0.72;
+			}
+		}
+
+
+		if(KeyHeld::jump_up && key_held == KeyHeld::jump_up){
+			if(KeyState::is_grounded && _player->state == KeyState::is_grounded){
+				_player->state ^= EntityState::is_grounded;
+				_player->velocity.y = -5;
+			}
+		}
+		
+
+		if(walk_down){
+			if(!grounded){
+				velocity.y += 0.8;
+			}
+		}
+
+		if(!grounded){
+			pos_y += (velocity.y * (100 * Timer::delta_time));
+			velocity.y += GRAVITY;
+			if(pos_y > 340){
+				pos_y = 340;
+				velocity.y = 0;
+				grounded = true;
+			}
+		}
+
+		pos_x += velocity.x * (100 * Timer::delta_time);
+
+		if(pos_x < 0){
+			pos_x = 0;
+			velocity.x = 0;
+		}
+
+		if(pos_x + width > 380){pos_x = 380 - width;}
+
+		if((walk_left || walk_right) && grounded){
+			walking_animation.Progress();
+			is_walking = true;
+		}
+		else{
+			walking_animation.Stop();
+			is_walking = false;
+		}
+			
+		if(!is_walking && !is_jumping){
+			base_animation.Progress();
+			is_base = true;
+		}
+		else{
+			base_animation.Stop();
+			is_base = false;
+		}
+
+		printf("vel: %f \n", static_cast<float>(velocity.x));
 	}
 }
 
@@ -112,80 +201,7 @@ namespace Entity
 void Player::Update()
 {
 	//
-	if(walk_left){
-		flipped = true;
-		velocity.x -= 0.08;
-		if(velocity.x < -(max_velocity.x)){velocity.x = -(max_velocity.x);}
-	}
-	else{
-		if(velocity.x < 0){
-			(velocity.x > -1 && velocity.x < 0) ? velocity.x = 0 : velocity.x += 0.72;
-		}
-	}
-	//
-	if(walk_right){
-		flipped = false;
-		velocity.x += 0.08;
-		if(velocity.x > max_velocity.x){velocity.x = max_velocity.x;}
-	}
-	else{
-		if(velocity.x > 0){
-			if(velocity.x < 1 && velocity.x > 0){velocity.x = 0;}
-			else{velocity.x -= 0.72;}
-		}
-	}
-	//
-	if(walk_up){
-		if(grounded){
-			grounded = false;
-			velocity.y = -5;
-		}
-	}
-	//
-	if(walk_down){
-		if(!grounded){
-			velocity.y += 0.8;
-		}
-	}
-
-	if(!grounded){
-		pos_y += (velocity.y * (100 * Timer::delta_time));
-		velocity.y += GRAVITY;
-		if(pos_y > 340){
-			pos_y = 340;
-			velocity.y = 0;
-			grounded = true;
-		}
-	}
-
-	pos_x += velocity.x * (100 * Timer::delta_time);
-
-	if(pos_x < 0){
-		pos_x = 0;
-		velocity.x = 0;
-	}
-
-	if(pos_x + width > 380){pos_x = 380 - width;}
-
-	if((walk_left || walk_right) && grounded){
-		walking_animation.Progress();
-		is_walking = true;
-	}
-	else{
-		walking_animation.Stop();
-		is_walking = false;
-	}
-		
-	if(!is_walking && !is_jumping){
-		base_animation.Progress();
-		is_base = true;
-	}
-	else{
-		base_animation.Stop();
-		is_base = false;
-	}
-
-	printf("vel: %f \n", static_cast<float>(velocity.x));
+	
 }
 
 void Player::Destroy()
