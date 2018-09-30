@@ -24,10 +24,11 @@ namespace Entity
 
 	void Create(BaseEntity* _self, SDL_Rect _base_pos)
 	{
+		//Setting up player animation...
 		float temp_still_animation_frame_durations[5] 		= {1.00, 1.00, 1.00, 1.00};
 		float temp_running_animation_frame_durations[5] 	= {1.00, 1.00, 1.00, 1.00};
 		float temp_jumping_animation_frame_durations[4] 	= {1.00, 1.00, 1.00};
-		//float temp_attacking_animation_frame_durations[5] 	= {1.00, 1.00, 1.00, 1.00};
+		//float temp_attacking_animation_frame_durations[5] 	= {1.00, 1.00, 1.00, 1.00}; - not useable yet
 
 		_self->base_animation.set(_base_pos, 5, temp_still_animation_frame_durations);
 		_base_pos.y += _base_pos.h; 
@@ -35,119 +36,78 @@ namespace Entity
 		_base_pos.y += _base_pos.h;
 		_self->jumping_animation.set(_base_pos, 4, temp_jumping_animation_frame_durations);
 
-		if(_self->identifer && EntityIdentifer::is_player == EntityIdentifer::is_player){
-			
+		if(EntityIdentifer::is_player && _self->identifer == EntityIdentifer::is_player){
+			_self->pos_x = 320;
+			_self->pos_y = 322 - 64;
+			_self->max_velocity.Create(3.4,5);
 		}
 	}
 
+	void Update(BaseEntity* _self)
+	{
+		if(!EntityState::is_grounded && _self->grounded == _self->grounded){
+			pos_y = pos_y + (10 * Timer::delta_time)
+		}
 
-}
 
-void BaseEntity::Create(SDL_Rect _src_pos)
-{
-	float temp[5] = {1.00,1.00,1.00,1.00};
-	base_animation.Set(_src_pos,5,temp);
+	}
 
-	pos_x = 320;
-	pos_y = 240;
-	width = _src_pos.w;
-	height = _src_pos.h;
-	
-}
+	void Render(BaseEntity* _self)
+	{
+		int temp_x = static_cast<int>(_self->pos_x);
+		int temp_y = static_cast<int>(_self->pos_y);
+		sprite.dst_pos = {temp_x, temp_y, _self->width, _self->height};
 
-void BaseEntity::Update()
-{
-	//printf("delta_time: %f\n", Timer::delta_time);
-	//if(!grounded){pos_y = pos_y + (10 * Timer::delta_time);}
-}
+		if(EntityState::is_still && _self->state == EntityState::is_still)			{current_animation = &_self->base_animation;}
+		else if(EntityState::is_walking && _self->state == EntityState::is_walking)	{current_animation = &_self->walking_animation;}
+		else if(EntityState::is_jumping && _self->state == EntityState::is_jumping)	{current_animation = &_self->jumping_animation;}
+		else{
+			current_animation = nullptr;
+			printf("No Entity State Specified\n");
+		}
 
-void BaseEntity::Render()
-{
-	
-}
+		if(EntityState::is_flipped && ){sprite.Render(current_animation, SDL_FLIP_HORIZONTAL);}
+		else{sprite.Render(current_animation);}
+	}
 
-void BaseEntity::Destroy()
-{
+	void Destroy(BaseEntity _self)
+	{
+		
+	}
 
-}
 
-void BaseEntity::Jump()
-{
-	
-}
-
-void Player::Create(SDL_Rect _src_pos)
-{
-	//Setting Up Animations for Player
-	float temp_walking[5]{0.08,0.08,0.08,0.08};
-	SDL_Rect walking_pos = {0,47,32,47};
-	walking_animation.Set(walking_pos,4,temp_walking);
-	SDL_Rect base_pos = {0,0,32,47};
-	float temp_base[11]{2.0,0.08,0.08,0.08,0.08,1.00,0.08,0.08,0.08,0.08};
-	base_animation.Set(base_pos,10,temp_base);
-
-	pos_x = 320;
-	pos_y = 322 - 64;
-	width = _src_pos.w;
-	height = _src_pos.h;
-
-	max_velocity.Create(3.4,5);
-}
-
-void Player::Render()
-{
-	int temp_x = static_cast<int>(pos_x);
-	int temp_y = static_cast<int>(pos_y);
-	sprite.dst_pos = {temp_x, temp_y, width, height};
-
-	Animation* current_animation = &base_animation;; 
-	if(is_base){current_animation = &base_animation;}
-	else if(is_walking){current_animation = &walking_animation;}
-	else if(is_jumping){current_animation = &jumping_animation;}
-
-	if(flipped){sprite.Render(current_animation, SDL_FLIP_HORIZONTAL);}
-	else{sprite.Render(current_animation);}
-}
-
-void Player::HandleEvents(SDL_Event* _event)
-{
-	if(_event->type == SDL_KEYDOWN){
-		switch(_event->key.keysym.sym){
-			case SDLK_UP:
-				walk_up = true;
+	void HandleEvents(SDL_Event* _event)
+	{
+		if(_event->type == SDL_KEYDOWN){
+			switch(_event->key.keysym.sym){
+				case SDLK_UP:
+				key_held |= KeyHeld::jump_up;
 				break;
 			case SDLK_RIGHT:
-				walk_right = true;
+				key_held |= KeyHeld::walk_right;
 				break;
 			case SDLK_DOWN:
-				walk_down = true;
+				key_held |= KeyHeld::dive_down;
 				break;
 			case SDLK_LEFT:
-				walk_left = true;
+				key_held |= KeyHeld::walk_left;
 				break;
 			default:
 				break;
+			}
+		}
+
+		if(_event-> type == SDL_KEYUP){
+
 		}
 	}
-	if(_event->type == SDL_KEYUP){
-		switch(_event->key.keysym.sym){
-			case SDLK_UP:
-				walk_up = false;
-				break;
-			case SDLK_RIGHT:
-				walk_right = false;
-				break;
-			case SDLK_DOWN:
-				walk_down = false;
-				break;
-			case SDLK_LEFT:
-				walk_left = false;
-				break;
-			default:
-				break;
-		}
+
+	void MovePlayer()
+	{
+		
 	}
 }
+
 
 void Player::Update()
 {

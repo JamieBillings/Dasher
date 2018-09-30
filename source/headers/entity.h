@@ -33,8 +33,7 @@ enum KeyHeld
 
 struct EntityStruct
 {
-	static Texture sprite;
-
+	
 	float pos_x;
 	float pos_y;
 	int width;
@@ -57,8 +56,12 @@ struct EntityStruct
 
 namespace Entity
 {
+	static Texture sprite;
+
 	BaseEntity player;
 	BaseEntity enemy1;
+
+	KeyHeld key_held;
 
 	namespace Private
 	{
