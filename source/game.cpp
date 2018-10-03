@@ -1,6 +1,6 @@
 namespace Game
 {
-	Player player;
+	EntityStruct player;
 	Texture background;
 	SDL_Point ground = {0, 322}; 
 
@@ -14,7 +14,7 @@ namespace Game
 			if(event->type == SDL_QUIT){return false;}
 
 			
-			player.HandleEvents(event);
+			Entity::HandleEvents(event);
 
 		}
 
@@ -27,11 +27,11 @@ namespace Game
 		Window::CreateWindow();
 		Renderer::CreateRenderer();
 
-		BaseEntity::Init();
+		Entity::Init();
 		background.Load("Dev\\Images\\ground--temp.png");
 
 		SDL_Rect temp = {0,47,32,47};
-		player.Create(temp);
+		Enitiy::Create(player, temp);
 
 		for(int i = 0; i < 100; i++){
 			entity_render_queue[i] = nullptr;

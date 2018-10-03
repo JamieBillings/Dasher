@@ -43,6 +43,19 @@ namespace Entity
 		}
 	}
 
+	EntityStruct CreateBlankEntity()
+	{
+		EntityStruct empty_entity;
+
+		empty_entity.identifer = EntityIdentifer::is_unknown_entity_type;
+		float empty_animations[1] = {0.00};
+		SDL_Rect empty_pos = {0,0,0,0};
+
+		empty_entity->base_animation.set(empty_pos, 1, empty_animations);
+		empty_entity->walking_animation.set(empty_pos, 1, empty_animations)
+		empty_entity->jumpingaaa_animation.set(empty_pos, 1, empty_animations)
+	}
+
 	void Update(BaseEntity* _self)
 	{
 		if(!EntityState::is_grounded && _self->grounded == _self->grounded){
@@ -195,16 +208,4 @@ namespace Entity
 
 		printf("vel: %f \n", static_cast<float>(velocity.x));
 	}
-}
-
-
-void Player::Update()
-{
-	//
-	
-}
-
-void Player::Destroy()
-{
-
 }

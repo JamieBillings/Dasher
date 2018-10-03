@@ -73,6 +73,7 @@ namespace Entity
 
 	//base entity functions
 	void Create(BaseEntity* _self, SDL_Rect _base_pos);
+	EntityStruct CreateBlankEntity();
 	void Update(BaseEntity* _self);
 	void Render(BaseEntity* _self);
 	void Destroy(BaseEntity* _self);

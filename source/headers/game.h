@@ -3,7 +3,7 @@
 
 namespace Game
 {
-	BaseEntity* entity_render_queue[100];
+	EntityStruct entity_array[100];
 
 	bool Event(SDL_Event* event);
 	void Init();
