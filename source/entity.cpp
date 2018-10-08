@@ -1,11 +1,9 @@
 #include "headers\\entity.h"
 
-Texture BaseEntity::sprite;
+
 
 namespace Entity
 {
-	BaseEntity player;
-	BaseEntity enemy1;
 
 	namespace Private
 	{
@@ -14,12 +12,12 @@ namespace Entity
 
 	void Init()
 	{
-		BaseEntity::sprite.Load("Dev\\Images\\SimonSpriteSheet.png");
+		Private::sprite.Load("Dev\\Images\\SimonSpriteSheet.png");
 	}
 
 	void Deinit()
 	{
-		BaseEntity::sprite.Unload();
+		Private::sprite.Unload();
 	}
 
 	void Create(BaseEntity* _self, SDL_Rect _base_pos)
@@ -41,26 +39,14 @@ namespace Entity
 			_self->pos_y = 322 - 64;
 			_self->max_velocity.Create(3.4,5);
 		}
-	}
-
-	EntityStruct CreateBlankEntity()
-	{
-		EntityStruct empty_entity;
-
-		empty_entity.identifer = EntityIdentifer::is_unknown_entity_type;
-		float empty_animations[1] = {0.00};
-		SDL_Rect empty_pos = {0,0,0,0};
-
-		empty_entity->base_animation.set(empty_pos, 1, empty_animations);
-		empty_entity->walking_animation.set(empty_pos, 1, empty_animations)
-		empty_entity->jumpingaaa_animation.set(empty_pos, 1, empty_animations)
+		else{
+			_self->identifer = EntityIdentifer::is_unknown;
+		}
 	}
 
 	void Update(BaseEntity* _self)
 	{
-		if(!EntityState::is_grounded && _self->grounded == _self->grounded){
-			pos_y = pos_y + (10 * Timer::delta_time)
-		}
+		if(EntityState::is_grounded && _self->grounded != _self->grounded){pos_y = pos_y + (10 * Timer::delta_time)}
 
 
 	}

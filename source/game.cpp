@@ -31,30 +31,34 @@ namespace Game
 		background.Load("Dev\\Images\\ground--temp.png");
 
 		SDL_Rect temp = {0,47,32,47};
-		Enitiy::Create(player, temp);
+		Entity::Create(player, temp);
+
+		EntityStruct empty_entity;
+		SDL_Rect empty_struct = {0,0,0,0};
+		Entity::Create(empty_entity, empty_struct);
 
 		for(int i = 0; i < 100; i++){
-			entity_render_queue[i] = nullptr;
+			entity_render_queue[i] = empty_entity;
 		}
-		entity_render_queue[0] = &player;
+		entity_render_queue[0] = player;
 	}
 
 	void GameLoop()
 	{
 		for(int i = 0; i < 100; i++){
-			if(entity_render_queue[i] != nullptr){
-				entity_render_queue[i]->Update();
-				if(!entity_render_queue[i]->grounded){
-					if(entity_render_queue[i]->pos_y + entity_render_queue[i]->height > ground.y){
-						entity_render_queue[i]->pos_y = ground.y - entity_render_queue[i]->height;
-						entity_render_queue[i]->grounded = true;
+			if(entity_render_queue[i].identifier != EntityIdentifer::is_unknown){
+				Entity::Update(entity_render_queue[i]);
+				if(EntityState::is_grounded && entity_render_queue[i] == EntityState::is_grounded){
+					if(entity_render_queue[i].pos_y + entity_render_queue[i].height > ground.y){
+						entity_render_queue[i].pos_y = ground.y - entity_render_queue[i].height;
+						entity_render_queue[i].is_grounded |= EntityState::is_grounded;
 					}
 				}
 			}
 		}
 
-		if(entity_render_queue[0]->velocity.x > 0 && entity_render_queue[0]->pos_x + entity_render_queue[0]->width == 380){
-			map_offset += entity_render_queue[0]->velocity.x;
+		if(entity_render_queue[0].velocity.x > 0 && entity_render_queue[0].pos_x + entity_render_queue[0].width == 380){
+			map_offset += entity_render_queue[0].velocity.x;
 		}
 		printf("Map Offset = %f\n", static_cast<float>(map_offset));
 	}
@@ -65,7 +69,7 @@ namespace Game
 		background.Render();
 
 		for(int i = 0; i < 100; i++){
-			if(entity_render_queue[i] != nullptr){entity_render_queue[i]->Render();}
+			if(entity_render_queue[i] != nullptr){Entity::Render(entity_render_queue[i]);}
 		}
 	}
 

@@ -10,13 +10,13 @@ enum EntityState
 	is_still 	= 4,
 	is_walking 	= 8,
 	is_jumping 	= 16
-}
+};
 
 enum EntityIdentifer
 {
-	is_player 				= 1,
- 	is_unknown_enemy_type 	= 128
-}
+	is_player 	= 1,
+ 	is_unknown 	= 128
+};
 
 enum KeyHeld
 {
@@ -29,11 +29,10 @@ enum KeyHeld
 	attack_right	=  32,
 	attack_down		=  64,
 	attack_left		= 128
-}
+};
 
 struct EntityStruct
-{
-	
+{	
 	float pos_x;
 	float pos_y;
 	int width;
@@ -56,77 +55,28 @@ struct EntityStruct
 
 namespace Entity
 {
-	static Texture sprite;
-
-	BaseEntity player;
-	BaseEntity enemy1;
+	
 
 	KeyHeld key_held;
 
 	namespace Private
 	{
-		
+		static Texture sprite;
 	}
 	//Static Functions
 	void Init();
 	void Deinit();
 
 	//base entity functions
-	void Create(BaseEntity* _self, SDL_Rect _base_pos);
+	void Create(EntityStruct* _self, SDL_Rect _base_pos);
 	EntityStruct CreateBlankEntity();
-	void Update(BaseEntity* _self);
-	void Render(BaseEntity* _self);
-	void Destroy(BaseEntity* _self);
+	void Update(EntityStruct* _self);
+	void Render(EntityStruct* _self);
+	void Destroy(EntityStruct* _self);
 
 	//player only entity functions
 	void HandleKeyEvents(SDL_Event _event);
 	void Movement();
 }
-
-class BaseEntity
-{
-public:
-	static Texture sprite;
-	static void Init();
-	static void Deinit();
-
-	float pos_x;
-	float pos_y;
-	int width;
-	int height;
-
-	Vector2D vector;
-
-	static float map_offset;
-
-	Animation base_animation;
-	Animation walking_animation;
-	Animation jumping_animation;
-
-	virtual void Create(SDL_Rect _src_pos);
-	virtual void Update();
-	virtual void Render();
-	virtual void Destroy();
-
-	void Jump();
-
-};
-
-class Player: public BaseEntity
-{
-public:
-	bool walk_up;
-	bool walk_right;
-	bool walk_down;
-	bool walk_left;
-
-	virtual void Create(SDL_Rect _src_pos);
-	virtual void Update();
-	virtual void Render();
-	virtual void Destroy();
-	void HandleEvents(SDL_Event* _event);
-	void CheckMapBound();
-};
-
 
 #endif
