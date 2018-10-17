@@ -20,7 +20,7 @@ namespace Entity
 		Private::sprite.Unload();
 	}
 
-	void Create(BaseEntity* _self, SDL_Rect _base_pos)
+	void Create(EntityStruct* _self, SDL_Rect _base_pos)
 	{
 		//Setting up player animation...
 		float temp_still_animation_frame_durations[5] 		= {1.00, 1.00, 1.00, 1.00};
@@ -28,13 +28,13 @@ namespace Entity
 		float temp_jumping_animation_frame_durations[4] 	= {1.00, 1.00, 1.00};
 		//float temp_attacking_animation_frame_durations[5] 	= {1.00, 1.00, 1.00, 1.00}; - not useable yet
 
-		_self->base_animation.set(_base_pos, 5, temp_still_animation_frame_durations);
+		_self->base_animation.Set(_base_pos, 5, temp_still_animation_frame_durations);
 		_base_pos.y += _base_pos.h; 
-		_self->walking_animation.set(_base_pos, 5, temp_running_animation_frame_durations);
+		_self->walking_animation.Set(_base_pos, 5, temp_running_animation_frame_durations);
 		_base_pos.y += _base_pos.h;
-		_self->jumping_animation.set(_base_pos, 4, temp_jumping_animation_frame_durations);
+		_self->jumping_animation.Set(_base_pos, 4, temp_jumping_animation_frame_durations);
 
-		if(EntityIdentifer::is_player && _self->identifer == EntityIdentifer::is_player){
+		if((EntityIdentifer::is_player & _self->identifer) == EntityIdentifer::is_player){
 			_self->pos_x = 320;
 			_self->pos_y = 322 - 64;
 			_self->max_velocity.Create(3.4,5);
@@ -44,32 +44,35 @@ namespace Entity
 		}
 	}
 
-	void Update(BaseEntity* _self)
+	void Update(EntityStruct* _self)
 	{
-		if(EntityState::is_grounded && _self->grounded != _self->grounded){pos_y = pos_y + (10 * Timer::delta_time)}
+		if((EntityState::is_grounded & _self->state) != EntityState::is_grounded){
+			_self->pos_y = _self->pos_y + (10 * Timer::delta_time);
+		}
 
 
 	}
 
-	void Render(BaseEntity* _self)
+	void Render(EntityStruct* _self)
 	{
 		int temp_x = static_cast<int>(_self->pos_x);
 		int temp_y = static_cast<int>(_self->pos_y);
-		sprite.dst_pos = {temp_x, temp_y, _self->width, _self->height};
+		Private::sprite.dst_pos = {temp_x, temp_y, _self->width, _self->height};
 
-		if(EntityState::is_still && _self->state == EntityState::is_still)			{current_animation = &_self->base_animation;}
-		else if(EntityState::is_walking && _self->state == EntityState::is_walking)	{current_animation = &_self->walking_animation;}
-		else if(EntityState::is_jumping && _self->state == EntityState::is_jumping)	{current_animation = &_self->jumping_animation;}
+		Animation* current_animation;
+			 if((EntityState::is_still & _self->state)   == EntityState::is_still)		{current_animation = &_self->base_animation;}
+		else if((EntityState::is_walking & _self->state) == EntityState::is_walking)	{current_animation = &_self->walking_animation;}
+		else if((EntityState::is_jumping & _self->state) == EntityState::is_jumping)	{current_animation = &_self->jumping_animation;}
 		else{
 			current_animation = nullptr;
 			printf("No Entity State Specified\n");
 		}
 
-		if(EntityState::is_flipped && ){sprite.Render(current_animation, SDL_FLIP_HORIZONTAL);}
-		else{sprite.Render(current_animation);}
+		if(((EntityState::is_flipped & _self->state) == EntityState::is_flipped) && current_animation != nullptr){Private::sprite.Render(current_animation, SDL_FLIP_HORIZONTAL);}
+		else{Private::sprite.Render(current_animation);}
 	}
 
-	void Destroy(BaseEntity _self)
+	void Destroy(EntityStruct _self)
 	{
 		
 	}
@@ -136,44 +139,45 @@ namespace Entity
 		}
 		else{
 			if(_player->velocity.x > 0){
-				(_player->velocity.x < 1 && _player->velocity.x > 0) ? _player->velocity.x = 0 : _player->velocity.x -= 0.72;
+				((_player->velocity.x < 1) && (_player->velocity.x > 0)) ? _player->velocity.x = 0 : _player->velocity.x -= 0.72;
 			}
 		}
 
 
-		if(KeyHeld::jump_up && key_held == KeyHeld::jump_up){
-			if(KeyState::is_grounded && _player->state == KeyState::is_grounded){
+		if((KeyHeld::jump_up & key_held) == KeyHeld::jump_up){
+			if((EntityState::is_grounded & _player->state) == EntityState::is_grounded){
 				_player->state ^= EntityState::is_grounded;
 				_player->velocity.y = -5;
 			}
 		}
 		
 
-		if(walk_down){
-			if(!grounded){
-				velocity.y += 0.8;
+		if((KeyHeld::dive_down & key_held) == KeyHeld::dive_down){
+			if((EntityState::is_grounded & _player->state) != EntityState::is_grounded){
+				_player->velocity.y += 0.8;
 			}
 		}
 
-		if(!grounded){
-			pos_y += (velocity.y * (100 * Timer::delta_time));
-			velocity.y += GRAVITY;
-			if(pos_y > 340){
-				pos_y = 340;
-				velocity.y = 0;
-				grounded = true;
+		if((EntityState::is_grounded & _player->state) != EntityState::is_grounded){
+			_player->pos_y += (_player->velocity.y * (100 * Timer::delta_time));
+			_player->velocity.y += GRAVITY;
+			if(_player->pos_y > 340){
+				_player->pos_y = 340;
+				_player->velocity.y = 0;
+				_player->state |= EntityState::is_grounded;
 			}
 		}
 
-		pos_x += velocity.x * (100 * Timer::delta_time);
+		_player->pos_x += _player->velocity.x * (100 * Timer::delta_time);
 
-		if(pos_x < 0){
-			pos_x = 0;
-			velocity.x = 0;
+		if(_player->pos_x < 0){
+			_player->pos_x = 0;
+			_player->velocity.x = 0;
 		}
 
-		if(pos_x + width > 380){pos_x = 380 - width;}
+		if(_player->pos_x + _player->width > 380){_player->pos_x = 380 - _player->width;}
 
+		/*
 		if((walk_left || walk_right) && grounded){
 			walking_animation.Progress();
 			is_walking = true;
@@ -191,7 +195,7 @@ namespace Entity
 			base_animation.Stop();
 			is_base = false;
 		}
-
-		printf("vel: %f \n", static_cast<float>(velocity.x));
+		*/
+		printf("vel: %f \n", static_cast<float>(_player->velocity.x));
 	}
 }

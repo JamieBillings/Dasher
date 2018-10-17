@@ -49,15 +49,15 @@ struct EntityStruct
 
 	float jump_height;
 
-	EntityState state;
-	EntityIdentifer identifer;
+	int state;
+	int identifer;
 };
 
 namespace Entity
 {
 	
 
-	KeyHeld key_held;
+	int key_held;
 
 	namespace Private
 	{
