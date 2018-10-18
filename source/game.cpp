@@ -1,6 +1,7 @@
 namespace Game
 {
 	EntityStruct player;
+	EntityStruct entity_render_queue[100];
 	Texture background;
 	SDL_Point ground = {0, 322}; 
 
@@ -28,14 +29,14 @@ namespace Game
 		Renderer::CreateRenderer();
 
 		Entity::Init();
-		background.Load("Dev\\Images\\ground--temp.png");
+		background.Load("bin\\images\\ground-temp.png");
 
 		SDL_Rect temp = {0,47,32,47};
-		Entity::Create(player, temp);
+		Entity::Create(&player, temp);
 
 		EntityStruct empty_entity;
 		SDL_Rect empty_struct = {0,0,0,0};
-		Entity::Create(empty_entity, empty_struct);
+		Entity::Create(&empty_entity, empty_struct);
 
 		for(int i = 0; i < 100; i++){
 			entity_render_queue[i] = empty_entity;
@@ -46,12 +47,12 @@ namespace Game
 	void GameLoop()
 	{
 		for(int i = 0; i < 100; i++){
-			if(entity_render_queue[i].identifier != EntityIdentifer::is_unknown){
-				Entity::Update(entity_render_queue[i]);
-				if(EntityState::is_grounded && entity_render_queue[i] == EntityState::is_grounded){
+			if((entity_render_queue[i].identifier & EntityIdentifier::is_unknown) == EntityIdentifier::is_unknown){
+				Entity::Update(&entity_render_queue[i]);
+				if((EntityState::is_grounded & entity_render_queue[i].state) == EntityState::is_grounded){
 					if(entity_render_queue[i].pos_y + entity_render_queue[i].height > ground.y){
 						entity_render_queue[i].pos_y = ground.y - entity_render_queue[i].height;
-						entity_render_queue[i].is_grounded |= EntityState::is_grounded;
+						entity_render_queue[i].state |= EntityState::is_grounded;
 					}
 				}
 			}
@@ -69,13 +70,13 @@ namespace Game
 		background.Render();
 
 		for(int i = 0; i < 100; i++){
-			if(entity_render_queue[i] != nullptr){Entity::Render(entity_render_queue[i]);}
+			if(entity_render_queue[i].identifier == EntityIdentifier::is_unknown){Entity::Render(&entity_render_queue[i]);}
 		}
 	}
 
 	void Destroy()
 	{
-		BaseEntity::Deinit();
+		//BaseEntity::Deinit();
 
 		Renderer::DestroyRenderer();
 		Window::DestroyWindow();

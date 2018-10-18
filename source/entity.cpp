@@ -12,7 +12,7 @@ namespace Entity
 
 	void Init()
 	{
-		Private::sprite.Load("Dev\\Images\\SimonSpriteSheet.png");
+		Private::sprite.Load("bin\\Images\\spritesheet.png");
 	}
 
 	void Deinit()
@@ -34,14 +34,16 @@ namespace Entity
 		_base_pos.y += _base_pos.h;
 		_self->jumping_animation.Set(_base_pos, 4, temp_jumping_animation_frame_durations);
 
-		if((EntityIdentifer::is_player & _self->identifer) == EntityIdentifer::is_player){
+		if((EntityIdentifier::is_player & _self->identifier) == EntityIdentifier::is_player){
 			_self->pos_x = 320;
 			_self->pos_y = 322 - 64;
 			_self->max_velocity.Create(3.4,5);
 		}
 		else{
-			_self->identifer = EntityIdentifer::is_unknown;
+			_self->identifier = EntityIdentifier::is_unknown;
 		}
+
+		
 	}
 
 	void Update(EntityStruct* _self)
@@ -64,7 +66,7 @@ namespace Entity
 		else if((EntityState::is_walking & _self->state) == EntityState::is_walking)	{current_animation = &_self->walking_animation;}
 		else if((EntityState::is_jumping & _self->state) == EntityState::is_jumping)	{current_animation = &_self->jumping_animation;}
 		else{
-			current_animation = nullptr;
+			current_animation = &_self->base_animation;
 			printf("No Entity State Specified\n");
 		}
 

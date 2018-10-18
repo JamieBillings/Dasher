@@ -12,7 +12,7 @@ enum EntityState
 	is_jumping 	= 16
 };
 
-enum EntityIdentifer
+enum EntityIdentifier
 {
 	is_player 	= 1,
  	is_unknown 	= 128
@@ -50,7 +50,7 @@ struct EntityStruct
 	float jump_height;
 
 	int state;
-	int identifer;
+	int identifier;
 };
 
 namespace Entity
