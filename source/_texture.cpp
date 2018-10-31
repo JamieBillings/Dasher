@@ -119,6 +119,16 @@ void Animation::Set(SDL_Rect _base_pos, int _key_frames, float* _speed_per_frame
 	loop = true;
 }
 
+void Animation::LoadFromFile(std::string _filename)
+{
+	char buffer[255];
+	FILE* animation_file = fopen(_filename.c_str(), "r");
+
+	fscanf()
+
+
+}
+
 void Animation::Progress()
 {
 	counter += Timer::delta_time;

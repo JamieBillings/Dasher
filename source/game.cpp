@@ -31,7 +31,8 @@ namespace Game
 		Entity::Init();
 		background.Load("bin\\images\\ground-temp.png");
 
-		SDL_Rect temp = {0,47,32,47};
+		SDL_Rect temp = {0,0,64,64};
+		player.identifier |= EntityIdentifier::is_player;
 		Entity::Create(&player, temp);
 
 		EntityStruct empty_entity;
@@ -61,7 +62,7 @@ namespace Game
 		if(entity_render_queue[0].velocity.x > 0 && entity_render_queue[0].pos_x + entity_render_queue[0].width == 380){
 			map_offset += entity_render_queue[0].velocity.x;
 		}
-		printf("Map Offset = %f\n", static_cast<float>(map_offset));
+		//printf("Map Offset = %f\n", static_cast<float>(map_offset));
 	}
 
 	void Render()
@@ -70,7 +71,11 @@ namespace Game
 		background.Render();
 
 		for(int i = 0; i < 100; i++){
-			if(entity_render_queue[i].identifier == EntityIdentifier::is_unknown){Entity::Render(&entity_render_queue[i]);}
+			if(entity_render_queue[i].identifier != EntityIdentifier::is_unknown){
+				Entity::Render(&entity_render_queue[i]);
+				printf("PLAYER POS X= %f Y= %f W=%d H=%d \n", entity_render_queue[i].pos_x,
+					entity_render_queue[i].pos_y, entity_render_queue[i].width, entity_render_queue[i].height);
+			}
 		}
 	}
 

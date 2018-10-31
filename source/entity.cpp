@@ -23,10 +23,10 @@ namespace Entity
 	void Create(EntityStruct* _self, SDL_Rect _base_pos)
 	{
 		//Setting up player animation...
-		float temp_still_animation_frame_durations[5] 		= {1.00, 1.00, 1.00, 1.00};
-		float temp_running_animation_frame_durations[5] 	= {1.00, 1.00, 1.00, 1.00};
-		float temp_jumping_animation_frame_durations[4] 	= {1.00, 1.00, 1.00};
-		//float temp_attacking_animation_frame_durations[5] 	= {1.00, 1.00, 1.00, 1.00}; - not useable yet
+		float temp_still_animation_frame_durations[4] 		= {1.00, 1.00, 1.00, 1.00};
+		float temp_running_animation_frame_durations[4] 	= {1.00, 1.00, 1.00, 1.00};
+		float temp_jumping_animation_frame_durations[3] 	= {1.00, 1.00, 1.00};
+			//float temp_attacking_animation_frame_durations[5] 	= {1.00, 1.00, 1.00, 1.00}; - not useable yet
 
 		_self->base_animation.Set(_base_pos, 5, temp_still_animation_frame_durations);
 		_base_pos.y += _base_pos.h; 
@@ -34,14 +34,21 @@ namespace Entity
 		_base_pos.y += _base_pos.h;
 		_self->jumping_animation.Set(_base_pos, 4, temp_jumping_animation_frame_durations);
 
+		//If the Entity is a player
 		if((EntityIdentifier::is_player & _self->identifier) == EntityIdentifier::is_player){
 			_self->pos_x = 320;
 			_self->pos_y = 322 - 64;
 			_self->max_velocity.Create(3.4,5);
+			_self->state = is_still;
+			printf("Created Player\n");
 		}
 		else{
 			_self->identifier = EntityIdentifier::is_unknown;
 		}
+
+		//Default
+		_self->width = _base_pos.w;
+		_self->height = _base_pos.h;
 
 		
 	}
@@ -62,8 +69,8 @@ namespace Entity
 		Private::sprite.dst_pos = {temp_x, temp_y, _self->width, _self->height};
 
 		Animation* current_animation;
-			 if((EntityState::is_still & _self->state)   == EntityState::is_still)		{current_animation = &_self->base_animation;}
-		else if((EntityState::is_walking & _self->state) == EntityState::is_walking)	{current_animation = &_self->walking_animation;}
+
+		if((EntityState::is_walking & _self->state) == EntityState::is_walking)			{current_animation = &_self->walking_animation;}
 		else if((EntityState::is_jumping & _self->state) == EntityState::is_jumping)	{current_animation = &_self->jumping_animation;}
 		else{
 			current_animation = &_self->base_animation;
@@ -123,7 +130,7 @@ namespace Entity
 
 	void MovePlayer(EntityStruct* _player)
 	{
-		if(KeyHeld::walk_left && key_held == KeyHeld::walk_left){
+		if((KeyHeld::walk_left & key_held) == KeyHeld::walk_left){
 			_player->state |= EntityState::is_flipped;
 			_player->velocity.x -= 0.08;
 			if(_player->velocity.x < -(_player->max_velocity.x)){_player->velocity.x = -(_player->max_velocity.x);}
@@ -134,7 +141,7 @@ namespace Entity
 			}
 		}
 		
-		if(KeyHeld::walk_right && key_held == KeyHeld::walk_right){
+		if((KeyHeld::walk_right & key_held) == KeyHeld::walk_right){
 			_player->state ^= EntityState::is_flipped;
 			_player->velocity.x += 0.08;
 			if(_player->velocity.x > _player->max_velocity.x){_player->velocity.x = _player->max_velocity.x;}

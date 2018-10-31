@@ -3,6 +3,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#include "cstdio"
 
 class Animation
 {
@@ -17,6 +18,7 @@ public:
 	bool loop;
 
 	void Set(SDL_Rect _base_pos, int _key_frames, float* _speed_per_frame);
+	void LoadFromFile(std::string _filename);
 	void Progress();
 	void Stop();
 	void Delete();
