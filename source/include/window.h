@@ -4,10 +4,9 @@
 namespace T_Window
 {
 
-void Create()
-{
+SDL_Window* window;
 
-}
+void Create();
 
 }
 

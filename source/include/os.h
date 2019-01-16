@@ -20,9 +20,8 @@ enum error_level
 
 namespace OSWindows
 {
-
-void Setup();
-void CreateErrorWindow();
+void Setup(SDL_Window* _window);
+void CreateErrorWindow(std::string _message, error_level _level);
 
 }
 
@@ -35,14 +34,16 @@ void CreateErrorWindow();
 }
 
 #if defined(OS_WINDOWS)
+#define WIN_32_LEAN_AND_MEAN
 #include <windows.h>
+#include <SDL2\SDL_syswm.h>
+
 namespace OS
 {
-    HWND    hwnd;
-    HANDLE  handle;
+    HWND self = nullptr;
 
-    void Setup(){OSWindows::Setup();}
-    void CreateErrorWindow(){OSWindows::CreateErrorWindow();}
+    void Setup(SDL_Window* _window){OSWindows::Setup(_window);}
+    void CreateErrorWindow(std::string _message, error_level _level){OSWindows::CreateErrorWindow(_message, _level);}
 }
 
 
