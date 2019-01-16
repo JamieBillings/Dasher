@@ -21,8 +21,11 @@ void Setup(SDL_Window* _window)
 void CreateErrorWindow(std::string _message, error_level _level)
 {
     switch(_level){
-        case debug:
-            
+        case error:
+            MessageBoxA(OS::self, _message.c_str(), "Error", MB_OK);
+            Global::running = false;
+            break;
+
         case warning:
             MessageBoxA(OS::self, _message.c_str(), "Warning", MB_OK);
             break;

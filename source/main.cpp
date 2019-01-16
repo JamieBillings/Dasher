@@ -3,6 +3,13 @@
 #include <string>
 #include <cstdio>
 
+namespace Global
+{
+
+bool running = true;
+
+}
+
 #include "include\os.h"
 #include "include\window.h"
 #include "include\texture.h"
@@ -24,7 +31,9 @@ int main(int argc, char* argv[])
     T_Window::Create();
     OS::Setup(T_Window::window);
 
-    while(true){
+    
+
+    while(Global::running){
 
     }
 
