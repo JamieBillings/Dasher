@@ -5,19 +5,26 @@ namespace T_Renderer
 {
     SDL_Renderer* renderer;
 
-    int render_scale;
-    int render_offset_x;
-    int render_offset_y;
+    int scale    = 1;
+    int offset_x = 0;
+    int offset_y = 0;
+
+    int old_window_width  = 640;
+    int old_window_height = 480;
     
-    SDL_Rect render_target;
-    SDL_Rect render_source;
+    SDL_Rect target;
+    SDL_Rect source;
 
     void Create();
+    void Update();
 
-    void RenderClear();
-    void RenderPresent();
+    void Clear();
+    void Present();
 
     void Destroy();
+
+    //TESTING FUNCTIONS
+    void FillViewPort(); //Testing the render scale and offset functionality
 
 }
 

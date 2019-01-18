@@ -8,6 +8,8 @@ namespace Global
 
 bool running = true;
 
+SDL_Event event;
+
 }
 
 #include "include\os.h"
@@ -25,7 +27,14 @@ int Startup()
     if(SDL_Init(SDL_INIT_EVERYTHING) != 0){return 1;}
     T_Window::Create();
     OS::Setup(T_Window::window);
+    T_Renderer::Create();
     return 0;
+}
+
+void Update()
+{
+    T_Window::Update();
+    T_Renderer::Update();
 }
 
 int main(int argc, char* argv[])
@@ -35,6 +44,18 @@ int main(int argc, char* argv[])
     
 
     while(Global::running){
+        while(SDL_PollEvent(&Global::event)!= 0){
+            if(Global::event.type == SDL_QUIT){Global::running = false;}
+        }
+
+        Update();
+
+        T_Renderer::Clear();
+
+        T_Renderer::FillViewPort();
+
+        T_Renderer::Present();
+
 
     }
 
