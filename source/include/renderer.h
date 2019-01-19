@@ -25,6 +25,7 @@ namespace T_Renderer
 
     //TESTING FUNCTIONS
     void FillViewPort(); //Testing the render scale and offset functionality
+    void RenderAtTarget(int _x, int _y);
 
 }
 

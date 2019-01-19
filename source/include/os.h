@@ -2,13 +2,13 @@
 #define __OS__DASHER
 
 #if defined(_WIN32)
-    #define OS_WINDOWS
+#define OS_WINDOWS
 #elif defined(_WIN64)
-    #define OS_WINDOWS
+#define OS_WINDOWS
 #elif defined(__linux__)
-    #define OS_LINUX
+#define OS_LINUX
 #else
-    #define OS_UNKNOWN
+#define OS_UNKNOWN
 #endif
 
 enum error_level

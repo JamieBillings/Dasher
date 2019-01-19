@@ -18,6 +18,13 @@ void Update()
     offset_x = (T_Window::width  / 2) - (T_Window::MIN_WIDTH  / 2);
     offset_y = (T_Window::height / 2) - (T_Window::MIN_HEIGHT / 2);
 
+    if(T_Window::width > T_Window::MIN_WIDTH * (scale + 1)){
+    if(T_Window::height > T_Window::MIN_HEIGHT * (scale + 1)){
+        scale++;
+    }
+    }
+
+
     old_window_width  = T_Window::width;
     old_window_height = T_Window::height;
 
@@ -52,6 +59,14 @@ void FillViewPort()
     target = {0, 0, T_Window::MIN_WIDTH * scale, T_Window::MIN_WIDTH * scale};
 
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_RenderFillRect(renderer, &target);
+}
+
+void RenderAtTarget(int _x, int _y)
+{
+    target = {_x, _y, 32, 32};
+
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
     SDL_RenderFillRect(renderer, &target);
 }
 

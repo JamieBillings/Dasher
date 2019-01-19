@@ -53,6 +53,7 @@ int main(int argc, char* argv[])
         T_Renderer::Clear();
 
         T_Renderer::FillViewPort();
+        T_Renderer::RenderAtTarget(20,20);
 
         T_Renderer::Present();
 
