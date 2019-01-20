@@ -16,11 +16,13 @@ SDL_Event event;
 #include "include\window.h"
 #include "include\renderer.h"
 #include "include\texture.h"
+#include "include\timer.h"
 
 #include "os.cpp"
 #include "window.cpp"
 #include "renderer.cpp"
 #include "texture.cpp"
+#include "timer.cpp"
 
 int Startup()
 {
@@ -28,19 +30,25 @@ int Startup()
     T_Window::Create();
     OS::Setup(T_Window::window);
     T_Renderer::Create();
+    T_FPSTimer::Start();
     return 0;
 }
 
 void Update()
 {
+    T_FPSTimer::GetTimeStep();
+
     T_Window::Update();
     T_Renderer::Update();
+
+    printf("timestep : %f \n", T_FPSTimer::time_step);
+    printf("Preformance : %lld \n", SDL_GetPerformanceCounter());
+    
 }
 
 int main(int argc, char* argv[])
 {
-    if(Startup() != 0){return 1;} 
-
+    if(Startup() != 0){return 1;}
     
 
     while(Global::running){
