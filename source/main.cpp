@@ -30,7 +30,6 @@ int Startup()
     T_Window::Create();
     OS::Setup(T_Window::window);
     T_Renderer::Create();
-    T_FPSTimer::Start();
     return 0;
 }
 
@@ -41,8 +40,8 @@ void Update()
     T_Window::Update();
     T_Renderer::Update();
 
-    printf("timestep : %f \n", T_FPSTimer::time_step);
-    printf("Preformance : %lld \n", SDL_GetPerformanceCounter());
+    //printf("timestep : %f \n", T_FPSTimer::time_step);
+    //printf("Preformance : %lld \n", SDL_GetPerformanceCounter());
     
 }
 
@@ -64,7 +63,6 @@ int main(int argc, char* argv[])
         T_Renderer::RenderAtTarget(20,20);
 
         T_Renderer::Present();
-
 
     }
 

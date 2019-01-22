@@ -5,28 +5,23 @@
     Timestep is represented in milliseconds
     1000ms = 1s
 
-    Start() is just so the GetTimeStep() function can work on first loop.
 */
 
 namespace T_FPSTimer
 {
-    uint64_t start_time;
-    uint64_t current_time;
+    uint64_t start_counter   = 0;
+    uint64_t end_counter     = 0;
 
-    float frame_rate;
-    double time_step;
+    double delta_time        = 0.0f;
 
-    enum ErrorID{
-        zerodivision = 0
-    };
+    double target_time       = 1.0f/60.0f;
+
+    double time_counter = 0;
+    uint64_t frame_counter = 0;
 
 
-    void Start();
     void GetTimeStep();
 
-    void ErrorCatch(ErrorID _code);
-
-    void Destroy();
 }
 
 #endif
