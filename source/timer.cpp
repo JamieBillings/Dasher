@@ -15,12 +15,14 @@ void GetTimeStep()
 {
     end_counter = SDL_GetPerformanceCounter();
 
-    double counter_diffrence = static_cast<double>((end_counter - start_counter)*1000)/SDL_GetPerformanceFrequency();
+    double counter_diffrence = static_cast<double>((end_counter - start_counter))/SDL_GetPerformanceFrequency();
+    counter_diffrence *= 1000;
 
-    printf("target%f\n", target_time); 
-    if(counter_diffrence < target_time){
-        uint64_t sleep_time = static_cast<uint32_t>(1000.0f * (target_time - counter_diffrence));
-        printf("(SLEEP TIME) %lld \n", sleep_time);
+    printf("counter time: %f \n", counter_diffrence);
+    printf("target_time: %f \n", target_time);
+    if(counter_diffrence < (target_time * 1000)){
+        uint32_t sleep_time = static_cast<uint32_t>(counter_diffrence - target_time);
+        printf("(SLEEP TIME) %d \n", sleep_time);
         SDL_Delay(sleep_time);
         counter_diffrence = static_cast<double>((SDL_GetPerformanceCounter() - start_counter)*1000)/SDL_GetPerformanceFrequency();
     }
