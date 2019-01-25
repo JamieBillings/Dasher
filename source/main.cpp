@@ -36,14 +36,12 @@ int Startup()
 void Update()
 {
     T_FPSTimer::GetTimeStep();
-
     T_Window::Update();
     T_Renderer::Update();
-
-    //printf("timestep : %f \n", T_FPSTimer::time_step);
-    //printf("Preformance : %lld \n", SDL_GetPerformanceCounter());
     
 }
+
+double _render_x_offset = 0;
 
 int main(int argc, char* argv[])
 {
@@ -51,6 +49,7 @@ int main(int argc, char* argv[])
     
 
     while(Global::running){
+
         while(SDL_PollEvent(&Global::event)!= 0){
             if(Global::event.type == SDL_QUIT){Global::running = false;}
         }

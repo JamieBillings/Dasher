@@ -14,13 +14,14 @@ namespace T_FPSTimer
 
     double delta_time        = 0.0f;
 
-    double target_time       = 1.0f/60.0f;
+    double target_time       = (1.0f/10.0f)*1000;
 
     double time_counter = 0;
     uint64_t frame_counter = 0;
 
 
     void GetTimeStep();
+    void ChangeTargetSeconds();
 
 }
 

@@ -8,36 +8,35 @@ void ChangeTargetSeconds(double _fps)
         return;
     }
 
-    target_time = 1.0f/_fps;
+    target_time = (1.0f/_fps)*1000;
 }
+
 
 void GetTimeStep()
 {
     end_counter = SDL_GetPerformanceCounter();
+    delta_time = static_cast<double>((end_counter - start_counter)*1000)/SDL_GetPerformanceFrequency();
 
-    double counter_diffrence = static_cast<double>((end_counter - start_counter))/SDL_GetPerformanceFrequency();
-    counter_diffrence *= 1000;
-
-    printf("counter time: %f \n", counter_diffrence);
-    printf("target_time: %f \n", target_time);
-    if(counter_diffrence < (target_time * 1000)){
-        uint32_t sleep_time = static_cast<uint32_t>(counter_diffrence - target_time);
-        printf("(SLEEP TIME) %d \n", sleep_time);
+    if(delta_time < target_time){
+        uint32_t sleep_time = static_cast<uint32_t>(target_time - delta_time);
         SDL_Delay(sleep_time);
-        counter_diffrence = static_cast<double>((SDL_GetPerformanceCounter() - start_counter)*1000)/SDL_GetPerformanceFrequency();
+        delta_time = static_cast<double>((SDL_GetPerformanceCounter() - start_counter)*1000)/SDL_GetPerformanceFrequency();
     }
 
-    time_counter += counter_diffrence;
+    time_counter += delta_time;
+    printf("TIME BASE: %f\n", time_counter);
     frame_counter++;
 
-    if(time_counter > 1000.0f){
-        printf("frame_counter = %lld\n", frame_counter);
+    if(time_counter >= 1000.0f){
+        printf("TIME: %f\n", time_counter);
+        printf("FPS: %lli\n", frame_counter);
         time_counter = 0;
         frame_counter = 0;
-    }
+    } 
 
     start_counter = SDL_GetPerformanceCounter();
 }
+
 
 
 }
