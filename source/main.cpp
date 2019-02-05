@@ -1,7 +1,9 @@
 #include <SDL2\SDL.h>
-
 #include <string>
 #include <cstdio>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "include\stb_image.h"
 
 namespace Global
 {
