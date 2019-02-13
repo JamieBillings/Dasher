@@ -3,15 +3,15 @@
 void Texture::LoadTextureFromImage(std::string _file)
 {
 	//Preparing Pixel Data
-    uint8* image_data;
-    image_data = stbi_load(_file.c_string, &width, &height, nullptr, 4);
+    uint8_t* image_data;
+    image_data = stbi_load(_file.c_str(), &width, &height, nullptr, 4);
 
     if(image_data == nullptr){
-    	printf("Failed to Load Image data %s \n", _file);
+    	printf("Failed to Load Image data %s \n", _file.c_str());
     	return;
     }
 
-    SDL_Surface temp_surface;
+    SDL_Surface* temp_surface;
 
     #if SDL_BYTEORDER == SDL_BIG_ENDIAN
     	uint32_t rmask = 0xff000000;
@@ -36,6 +36,6 @@ void Texture::LoadTextureFromImage(std::string _file)
     	return;
     }
 
-    texture = SDL_CreateTextureFromSurface(T_Renderer::renderer, )
+    texture = SDL_CreateTextureFromSurface(T_Renderer::renderer, temp_surface);
     SDL_FreeSurface(temp_surface);
 }

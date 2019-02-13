@@ -1,6 +1,8 @@
 #ifndef __TEXTURE__DASHER
 #define __TEXTURE__DASHER
 
+#include <ctype.h>
+
 struct Texture
 {
     SDL_Texture* texture;

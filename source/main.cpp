@@ -49,6 +49,7 @@ int main(int argc, char* argv[])
 {
     if(Startup() != 0){return 1;}
     
+    Texture new_texture;
 
     while(Global::running){
 
