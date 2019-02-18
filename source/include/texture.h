@@ -10,7 +10,8 @@ struct Texture
     int width;
     int height;
 
-    void LoadTextureFromImage(std::string _file);
+    void LoadTexture(std::string _file);
+    void FreeImage();
 };
 
 struct Animation

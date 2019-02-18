@@ -11,12 +11,14 @@ void Create()
     }
 }
 
+//@@ Currently runs everyloop need to check if this is a performance waste
 void Update()
 {
-    if(old_window_width == T_Window::width && old_window_height == T_Window::height){return;}
 
-    offset_x = (T_Window::width  / 2) - (T_Window::MIN_WIDTH  / 2);
-    offset_y = (T_Window::height / 2) - (T_Window::MIN_HEIGHT / 2);
+    //if(old_window_width == T_Window::width && old_window_height == T_Window::height){return;}
+
+    offset_x = (T_Window::width  / 2) - ((T_Window::MIN_WIDTH * scale)  / 2);
+    offset_y = (T_Window::height / 2) - ((T_Window::MIN_HEIGHT * scale) / 2);
 
     if(T_Window::width > T_Window::MIN_WIDTH * (scale + 1)){
     if(T_Window::height > T_Window::MIN_HEIGHT * (scale + 1)){
@@ -24,6 +26,11 @@ void Update()
     }
     }
 
+    if(T_Window::width < T_Window::MIN_WIDTH * (scale)){
+    if(T_Window::height < T_Window::MIN_HEIGHT * (scale)){
+        scale--;
+    }
+    }
 
     old_window_width  = T_Window::width;
     old_window_height = T_Window::height;
@@ -64,10 +71,18 @@ void FillViewPort()
 
 void RenderAtTarget(int _x, int _y)
 {
-    target = {_x, _y, 32, 32};
+    target = {_x, _y, 32 * scale, 32 * scale};
 
     SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
     SDL_RenderFillRect(renderer, &target);
+}
+
+void RenderTexture(SDL_Texture* _texture, SDL_Rect* src_pos, SDL_Rect* dst_pos)
+{
+    target = {dst_pos->x, dst_pos->y , 
+        dst_pos->w * scale, dst_pos->h * scale};
+
+    SDL_RenderCopy(renderer, _texture, src_pos, &target);
 }
 
 }

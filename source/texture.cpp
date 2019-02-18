@@ -1,15 +1,8 @@
-
-///@@FINISH
-void Texture::LoadTextureFromImage(std::string _file)
+void Texture::LoadTexture(std::string _file)
 {
 	//Preparing Pixel Data
     uint8_t* image_data;
     image_data = stbi_load(_file.c_str(), &width, &height, nullptr, 4);
-
-    if(image_data == nullptr){
-    	printf("Failed to Load Image data %s \n", _file.c_str());
-    	return;
-    }
 
     SDL_Surface* temp_surface;
 
@@ -25,17 +18,32 @@ void Texture::LoadTextureFromImage(std::string _file)
     	uint32_t amask = 0xff000000;
     #endif
 
+    if(image_data == nullptr){
+        printf("Failed to Load Image data %s \n", _file.c_str());
+        goto endfunction;
+    }
+
     temp_surface = SDL_CreateRGBSurface(0, width, height, 32, rmask, gmask, bmask, amask);
+    if(temp_surface == nullptr){
+        printf("Unable to Create Surface %s\n", SDL_GetError());
+        goto endfunction;
+    }
 
     SDL_LockSurface(temp_surface);
     memcpy(temp_surface->pixels, image_data, width * height * 4);
     SDL_UnlockSurface(temp_surface);
+    texture = SDL_CreateTextureFromSurface(T_Renderer::renderer, temp_surface);
 
-    if(temp_surface == nullptr){
-    	printf("Failed to create surface %s\n", SDL_GetError());
-    	return;
+    if(texture == nullptr){
+        printf("Unable to Create Texture %s\n", SDL_GetError());
     }
 
-    texture = SDL_CreateTextureFromSurface(T_Renderer::renderer, temp_surface);
+    endfunction:
     SDL_FreeSurface(temp_surface);
+    stbi_image_free(image_data);
+}
+
+void Texture::FreeImage()
+{
+    SDL_DestroyTexture(texture);
 }
