@@ -50,16 +50,6 @@ double _render_x_offset = 0;
 int main(int argc, char* argv[])
 {
     if(Startup() != 0){return 1;}
-    
-    Texture new_texture;
-    new_texture.LoadTexture("spin.png");
-
-    Sprite new_sprite;
-    new_sprite.source_sheet = &new_texture;
-
-    new_sprite.src_pos = {0,0,16,32};
-    new_sprite.dst_pos = {100,100,100,100};
-
 
     while(Global::running){
 
@@ -72,9 +62,6 @@ int main(int argc, char* argv[])
         T_Renderer::Clear();
 
         T_Renderer::FillViewPort();
-        T_Renderer::RenderAtTarget(20,20);
-
-        new_sprite.Render();
 
         T_Renderer::Present();
 

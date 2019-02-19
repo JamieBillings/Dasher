@@ -3,7 +3,6 @@ void Texture::LoadTexture(std::string _file)
 	//Preparing Pixel Data
     uint8_t* image_data;
     image_data = stbi_load(_file.c_str(), &width, &height, nullptr, 4);
-
     SDL_Surface* temp_surface;
 
     #if SDL_BYTEORDER == SDL_BIG_ENDIAN
@@ -19,7 +18,9 @@ void Texture::LoadTexture(std::string _file)
     #endif
 
     if(image_data == nullptr){
-        printf("Failed to Load Image data %s \n", _file.c_str());
+        std::string error_message =  "Failed to Load Image data ";
+        error_message +=  _file;
+        OS::CreateErrorWindow(error_message, error_level::error);
         goto endfunction;
     }
 
@@ -46,4 +47,22 @@ void Texture::LoadTexture(std::string _file)
 void Texture::FreeImage()
 {
     SDL_DestroyTexture(texture);
+}
+
+SDL_Rect Animation::Step(SDL_Rect _src_pos)
+{
+    time += T_FPSTimer::delta_time;
+    while(time > speed){
+        time -= speed;
+        if(frame_count < max_frame_count){frame_count++;}
+        else{
+            if(loop){frame_count = 0;}
+        }
+    }
+
+    SDL_Rect temp_pos;
+    temp_pos = _src_pos;
+    temp_pos.x += frame_count * frame_width;
+
+    return temp_pos;
 }

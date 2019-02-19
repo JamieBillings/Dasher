@@ -24,6 +24,10 @@ void GetTimeStep()
         delta_time = static_cast<double>((SDL_GetPerformanceCounter() - start_counter)*1000)/SDL_GetPerformanceFrequency();
     }
 
+    if(delta_time > 10000){
+        delta_time = 0;
+    }
+
     time_counter += delta_time;
     //printf("TIME BASE: %f\n", time_counter);
     frame_counter++;
@@ -36,6 +40,8 @@ void GetTimeStep()
     } 
 
     start_counter = SDL_GetPerformanceCounter();
+
+    //printf("DELTA: %f \n", delta_time);
 }
 
 

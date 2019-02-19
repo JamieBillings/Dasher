@@ -1,6 +1,18 @@
 #ifndef __OS__DASHER
 #define __OS__DASHER
 
+#define GET_VARIABLE_NAME(var_name) GetVaribleName(#var_name)
+
+std::string GetVaribleName(char* var_name)
+{
+    printf("%s\n", var_name);
+    
+    std::string result;
+    for(int i = 0; var_name[i] != '\0'; i++){result += var_name[i];}
+
+    return result;
+}
+
 #if defined(_WIN32)
 #define OS_WINDOWS
 #elif defined(_WIN64)

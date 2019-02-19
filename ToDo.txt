@@ -1,0 +1,28 @@
+==========================================
+  _____            _               
+ |  __ \          | |              
+ | |  | | __ _ ___| |__   ___ _ __ 
+ | |  | |/ _` / __| '_ \ / _ \ '__|
+ | |__| | (_| \__ \ | | |  __/ |   
+ |_____/ \__,_|___/_| |_|\___|_|   
+                                   
+==========================================
+
+
+To Do:
+
+    Engine:
+        [] GUI Creator
+        [] Event Handling
+        [] Config File Reading
+
+
+    External:
+        []Texture Atlas
+            [] Creator
+            [] Reader
+
+        []Animation Tool
+            [] Creator
+            [] Reader
+

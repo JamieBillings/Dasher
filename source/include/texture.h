@@ -26,6 +26,7 @@ struct Animation
     bool loop;
 
     void Create();
+    SDL_Rect Step(SDL_Rect _src_pos);
 };
 
 #endif
