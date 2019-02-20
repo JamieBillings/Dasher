@@ -87,6 +87,9 @@ void Image::LoadMask(std::string _source)
     for(int x = 0; x < width; x++){
         if(pixel_data[y * width + x] < 255){
             //Scan for the bounds of the mask
+            for(int i = 0; i < width - x; i++){
+                if(pixel_data[y * width ]) //stuff about the width - x here
+            }
         }
     }
     }
