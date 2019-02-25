@@ -81,12 +81,28 @@ int main(int argc, char** argv)
     Image new_image;
     new_image.width = old_image.width;
     new_image.height = old_image.height;
-    new_image.pixel_data = static_cast<unsigned char*>(malloc(old_image.width * old_image.height * 4));
+    new_image.pixel_data = static_cast<unsigned char*>(malloc(old_image.width * old_image.height * 4)); //@@Maybe not needed
+
+    uint32_t* old_pixel_data = reinterpret_cast<uint32_t*>(new_image.pixel_data);
+    uint32_t* new_pixel_data = reinterpret_cast<uint32_t*>(old_image.pixel_data);
 
     int start_pos_x = 0;
     int start_pos_y = 0;
 
+    //@@ Testing the output
     //@@ Add Y scanning to copy whole image
+    for(int y = 0; y < old_image.height; y++){
+        for(int x = 0; x < old_image.width; x++)
+        {
+            //Testing the output
+            new_pixel_data[y * old_image.width + x] = old_pixel_data[y * old_image.height + x];
+        }
+    }
+
+    for(int i = 0; i < old_image.height* old_image.width; i++){
+        if(old_pixel_data[i] != new_pixel_data[i]){printf("Error on: %d\n", i);}
+    }
+    /*
     for(int i = 0; i < mask_array_count; i++){
         for(int x = 0; x < (mask_array[i].width * 4); x+=4){
             new_image.pixel_data[start_pos_x + x] = old_image.pixel_data[20 * old_image.width + mask_array[i].x + x];
@@ -96,9 +112,13 @@ int main(int argc, char** argv)
         }
 
         start_pos_x += mask_array[i].width * 4;
-    }
+    }*/
 
-    stbi_write_png("Testings.png", new_image.width, new_image.height, 4, new_image.pixel_data, new_image.width * 4);
+    uint8_t* return_pixel_data = reinterpret_cast<uint8_t*>(new_pixel_data);
+
+
+
+    stbi_write_png("Testings.png", new_image.width, new_image.height, 4, return_pixel_data, old_image.width * 4);
 
     free(new_image.pixel_data);
     old_image.Free();
