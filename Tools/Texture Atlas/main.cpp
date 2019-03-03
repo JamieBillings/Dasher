@@ -84,10 +84,13 @@ int main(int argc, char** argv)
     new_image.height = old_image.height;
     new_image.pixel_data = static_cast<uint8_t*>(malloc(old_image.width * old_image.height * 4)); //@@Maybe not needed
 
-    uint8_t* old_pixel_data = old_image.pixel_data; //reinterpret_cast<uint32_t*>(old_image.pixel_data);
+    uint32_t* old_pixel_data = reinterpret_cast<uint32_t*>(old_image.pixel_data);
     uint8_t* new_pixel_data = new_image.pixel_data; //reinterpret_cast<uint32_t*>(new_image.pixel_data);
 
-    printf("OLD: %d | NEW: %d \n", old_image.pixel_data[0] ,old_pixel_data[0]);
+    printf("OLD1: %d | NEW1: %d \n", old_image.pixel_data[0] ,old_pixel_data[0]);
+    printf("OLD2: %d | NEW2: %d \n", old_image.pixel_data[1] ,old_pixel_data[1]);
+    printf("OLD3: %d | NEW3: %d \n", old_image.pixel_data[2] ,old_pixel_data[2]);
+    printf("OLD4: %d | NEW4: %d \n", old_image.pixel_data[3] ,old_pixel_data[3]);
 
 
     int start_pos_x = 0;
@@ -124,7 +127,7 @@ int main(int argc, char** argv)
 
 
 
-    stbi_write_png("Testings.png", old_image.width, old_image.height, 4, old_image.pixel_data, old_image.width * 4);
+    stbi_write_png("Testings.png", old_image.width, old_image.height, 4, old_pixel_data, old_image.width * 4);
 
     free(new_image.pixel_data);
     old_image.Free();
