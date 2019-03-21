@@ -43,6 +43,8 @@ public:
     void Create(int _x, int _y, int _width, int _height);
     bool Compare(Box _box);
     bool Compare(int _x, int _y);
+
+    void Copy(Box* _rhs);
 };
 
 /*  ARGV
@@ -55,6 +57,7 @@ public:
 
 int mask_array_count = 0;
 Box mask_array[100];
+Box pos_array[100];
 
 int main(int argc, char** argv)
 {
@@ -77,9 +80,18 @@ int main(int argc, char** argv)
         printf("Box #%d | x: %d | y: %d | w: %d | h: %d \n", i, mask_array[i].x, mask_array[i].y, mask_array[i].width, mask_array[i].height);
     }
     printf("BOX COUNT: %d\n", mask_array_count);
-        //@@ Everthing below here doesnt work
 
     //@@add a endian check : Project will only build for Little Endian
+
+    //@@Find where to put all the sprites
+        //try the most top left spot, if that doesnt work try to the right then down
+    for(int i = 0; i < mask_array_count; i++){
+        for(int y = 0; y < old_image.height; y++){
+        for(int x = 0; x < old_image.width x++){
+            //if
+        }
+        }
+    }
 
 
 
@@ -90,42 +102,21 @@ int main(int argc, char** argv)
     //new_image.pixel_data =  //@@Maybe not needed
 
     uint32_t* old_pixel_data = reinterpret_cast<uint32_t*>(old_image.pixel_data);
-    uint32_t* new_pixel_data = static_cast<uint32_t*>(malloc(old_image.width * old_image.height)); //reinterpret_cast<uint32_t*>(new_image.pixel_data);
+    uint8_t* ra_pixel_data = static_cast<uint8_t*>(malloc(old_image.width * old_image.height * 4)); //reinterpret_cast<uint32_t*>(new_image.pixel_data);
 
     //Testing the pixel data @@remove later
     //for(int i = 0; i < 5*5; i++){new_pixel_data[i] = old_pixel_data[i];}
-    if(memset(new_pixel_data, 255, old_image.width * old_image.height * 4) == nullptr){
+    if(memset(ra_pixel_data, 255, old_image.width * old_image.height * 4) == nullptr){
         printf("MEMORY ERROR\n");
     } // Alpha = 255 ; rest = 0
 
-    int start_pos_x = 0;
-    int start_pos_y = 0;
+    uint32_t* new_pixel_data = reinterpret_cast<uint32_t*>(ra_pixel_data);
 
-    //@@ Testing the output
-    //@@ Add Y scanning to copy whole image
+
+    //@@ Moving the masked pixelled to the determined area.
     for(int i = 0; i < mask_array_count; i++){
-        //box[i];
-        printf("Testing Box :%i\n",i);
 
-        for(int y = start_pos_y; y < start_pos_y + mask_array[i].height; y++){
-        for(int x = start_pos_x; x < start_pos_x + mask_array[i].width; x++){
 
-        /* 
-           new_pixel_data[y * old_image.width + x] = old_pixel_data[(mask_array[i].y + (y - start_pos_y)) * old_image.width 
-                + (mask_array[i].x + (x - start_pos_x))];
-                */
-        }
-        }
-
-        //Offset the start pos so the next box doesnt overwrite the image
-        if(start_pos_x + mask_array[i].width > old_image.width){
-            start_pos_y += mask_array[i].height;
-            start_pos_x = 0;
-        }
-        else{
-            start_pos_x += mask_array[i].width;
-        }
-        
     }
 
     uint8_t* return_cast = reinterpret_cast<uint8_t*>(new_pixel_data);
@@ -138,13 +129,14 @@ int main(int argc, char** argv)
 
     printf("FIXED BOXES\n");
     //CRASHES HERE PROBABLY DUE TO BAD MEMORY
-    stbi_write_png("Testings.png", old_image.width, old_image.height, 4, return_cast, old_image.width * 4);
+    //stbi_write_png("Testings.png", old_image.width, old_image.height, 4, return_cast, old_image.width * 4);
+    stbi_write_png("Testings.png", 4, 4, 4, return_cast, 16);
 
 
     printf("FIXED DRAWING\n");
-    free(new_image.pixel_data);
-    old_image.Free();
-    mask_image.Free();
+    //free(new_pixel_data);
+    //old_image.Free();
+    //mask_image.Free();
 
 
     return 0;
@@ -235,4 +227,10 @@ bool Box::Compare(int _x, int _y)
     }
 
     return false;
+}
+
+void Box::Copy(Box* _rhs)
+{
+    width = _rhs->width;
+    height = _rhs->height;
 }
